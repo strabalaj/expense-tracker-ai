@@ -1,36 +1,210 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Expense Tracker
+
+A modern, professional expense tracking web application built with Next.js 14, TypeScript, and Tailwind CSS. Track your personal finances with an intuitive interface, comprehensive analytics, and powerful filtering capabilities.
+
+## Features
+
+### Core Functionality
+- **Add Expenses**: Quick and easy expense entry with date, amount, category, and description
+- **Edit & Delete**: Modify or remove expenses with a clean modal interface
+- **Data Persistence**: All data is automatically saved to localStorage
+- **Form Validation**: Ensures data integrity with real-time validation feedback
+
+### Analytics & Insights
+- **Dashboard Overview**: View total spending, monthly totals, average expenses, and top categories at a glance
+- **Category Breakdown**: Visual chart showing spending distribution across all categories
+- **Summary Cards**: Key metrics displayed in beautiful, informative cards
+
+### Filtering & Search
+- **Date Range Filter**: View expenses within specific date ranges
+- **Category Filter**: Focus on specific expense categories
+- **Search**: Find expenses by description or category name
+- **Dynamic Results**: Real-time filtering with result counts
+
+### Categories
+- Food
+- Transportation
+- Entertainment
+- Shopping
+- Bills
+- Other
+
+### Export
+- **CSV Export**: Download your filtered expenses as a CSV file for external analysis
+
+### Design
+- Modern, clean interface with professional styling
+- Fully responsive design (works on desktop, tablet, and mobile)
+- Smooth transitions and hover effects
+- Loading states and visual feedback
+- Accessible color scheme with category-specific colors
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18.17 or later
+- npm, yarn, pnpm, or bun
 
+### Installation
+
+1. Navigate to the project directory:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd expense-tracker-ai
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Learn More
+### Build for Production
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## How to Use
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Adding an Expense
+1. Fill out the form on the left side of the dashboard:
+   - Select the date (defaults to today)
+   - Enter the amount in dollars
+   - Choose a category from the dropdown
+   - Add a description
+2. Click "Add Expense"
+3. Your expense will appear in the list and all analytics will update automatically
 
-## Deploy on Vercel
+### Editing an Expense
+1. Find the expense in the list
+2. Click the "Edit" button
+3. Modify the details in the modal that appears
+4. Click "Update Expense" to save changes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Deleting an Expense
+1. Find the expense in the list
+2. Click the "Delete" button
+3. Confirm the deletion in the dialog
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Filtering Expenses
+1. Use the filters section to narrow down your expenses:
+   - Set a start date and/or end date
+   - Select a specific category or choose "All"
+   - Type in the search box to find specific expenses
+2. Click "Clear Filters" to reset all filters
+
+### Exporting Data
+1. Apply any filters you want (or leave them clear for all expenses)
+2. Click the "Export CSV" button in the header
+3. A CSV file will download with your filtered expenses
+
+## Project Structure
+
+```
+expense-tracker-ai/
+├── app/
+│   ├── layout.tsx          # Root layout with metadata
+│   ├── page.tsx             # Main application page
+│   └── globals.css          # Global styles
+├── components/
+│   ├── ExpenseForm.tsx      # Form for adding/editing expenses
+│   ├── ExpenseList.tsx      # List container for expenses
+│   ├── ExpenseItem.tsx      # Individual expense display
+│   ├── ExpenseFilters.tsx   # Filter controls
+│   ├── SummaryCard.tsx      # Dashboard summary cards
+│   ├── CategoryChart.tsx    # Category spending visualization
+│   └── Modal.tsx            # Reusable modal component
+├── lib/
+│   ├── storage.ts           # localStorage utilities
+│   └── utils.ts             # Helper functions and calculations
+├── types/
+│   └── expense.ts           # TypeScript type definitions
+└── public/                  # Static assets
+```
+
+## Technologies Used
+
+- **Next.js 14**: React framework with App Router
+- **TypeScript**: Type-safe code
+- **Tailwind CSS**: Utility-first CSS framework
+- **React Hooks**: State management with useState and useEffect
+- **localStorage**: Client-side data persistence
+
+## Key Features Explained
+
+### Data Persistence
+All expense data is stored in your browser's localStorage, which means:
+- Data persists between sessions
+- No backend or database required
+- Data is private to your browser
+- Works offline
+
+### Responsive Design
+The application is fully responsive with breakpoints for:
+- Mobile devices (< 768px)
+- Tablets (768px - 1024px)
+- Desktop (> 1024px)
+
+### Form Validation
+- Date is required
+- Amount must be greater than 0
+- Description is required
+- Real-time error messages
+
+### Calculations
+- Total spending across all filtered expenses
+- Monthly total (current month only)
+- Average expense amount
+- Category-wise breakdown
+- Top spending category
+
+## Browser Support
+
+Works in all modern browsers that support:
+- ES6+
+- localStorage
+- CSS Grid and Flexbox
+
+Recommended browsers:
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## Future Enhancements
+
+Potential features for future versions:
+- Multiple currency support
+- Recurring expenses
+- Budget setting and tracking
+- Income tracking
+- Advanced charts (line graphs, pie charts)
+- Dark mode
+- Cloud sync
+- Import from CSV
+- Receipt photo upload
+- Tags/labels for expenses
+- Multi-user support
+
+## License
+
+This is a demo application created for personal finance tracking.
+
+## Support
+
+If you encounter any issues or have questions:
+1. Check that you're using a modern browser
+2. Clear your browser cache and localStorage
+3. Ensure JavaScript is enabled
+4. Try the application in incognito/private mode
+
+---
+
+Built with Next.js 14, TypeScript, and Tailwind CSS

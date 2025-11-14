@@ -1,65 +1,227 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Expense, ExpenseFormData, ExpenseFilters as ExpenseFiltersType } from '@/types/expense';
+import { storage } from '@/lib/storage';
+import {
+  generateId,
+  filterExpenses,
+  calculateSummary,
+  formatCurrency,
+  exportToCSV,
+} from '@/lib/utils';
+
+import ExpenseForm from '@/components/ExpenseForm';
+import ExpenseList from '@/components/ExpenseList';
+import ExpenseFilters from '@/components/ExpenseFilters';
+import SummaryCard from '@/components/SummaryCard';
+import CategoryChart from '@/components/CategoryChart';
+import Modal from '@/components/Modal';
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [filters, setFilters] = useState<ExpenseFiltersType>({
+    dateRange: { startDate: null, endDate: null },
+    category: 'All',
+    searchQuery: '',
+  });
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load expenses from localStorage on mount
+  useEffect(() => {
+    const loadedExpenses = storage.getExpenses();
+    setExpenses(loadedExpenses);
+    setIsLoading(false);
+  }, []);
+
+  const handleAddExpense = (formData: ExpenseFormData) => {
+    const newExpense: Expense = {
+      id: generateId(),
+      date: formData.date,
+      amount: parseFloat(formData.amount),
+      category: formData.category,
+      description: formData.description,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const updatedExpenses = [...expenses, newExpense];
+    setExpenses(updatedExpenses);
+    storage.saveExpenses(updatedExpenses);
+  };
+
+  const handleEditExpense = (formData: ExpenseFormData) => {
+    if (!editingExpense) return;
+
+    const updatedExpense: Expense = {
+      ...editingExpense,
+      date: formData.date,
+      amount: parseFloat(formData.amount),
+      category: formData.category,
+      description: formData.description,
+      updatedAt: new Date().toISOString(),
+    };
+
+    const updatedExpenses = expenses.map(exp =>
+      exp.id === editingExpense.id ? updatedExpense : exp
+    );
+
+    setExpenses(updatedExpenses);
+    storage.saveExpenses(updatedExpenses);
+    setIsEditModalOpen(false);
+    setEditingExpense(null);
+  };
+
+  const handleDeleteExpense = (id: string) => {
+    if (confirm('Are you sure you want to delete this expense?')) {
+      const updatedExpenses = expenses.filter(exp => exp.id !== id);
+      setExpenses(updatedExpenses);
+      storage.saveExpenses(updatedExpenses);
+    }
+  };
+
+  const openEditModal = (expense: Expense) => {
+    setEditingExpense(expense);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingExpense(null);
+  };
+
+  const handleExport = () => {
+    exportToCSV(filteredExpenses);
+  };
+
+  // Filter expenses
+  const filteredExpenses = filterExpenses(expenses, filters);
+  const summary = calculateSummary(filteredExpenses);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">💰</div>
+          <p className="text-gray-600">Loading your expenses...</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Expense Tracker</h1>
+              <p className="text-gray-600 mt-1">Manage your personal finances with ease</p>
+            </div>
+            <button
+              onClick={handleExport}
+              disabled={filteredExpenses.length === 0}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Export CSV
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <SummaryCard
+            title="Total Spending"
+            value={formatCurrency(summary.total)}
+            icon="💰"
+            trend={`${summary.count} transactions`}
+            color="blue"
+          />
+          <SummaryCard
+            title="This Month"
+            value={formatCurrency(summary.monthlyTotal)}
+            icon="📅"
+            color="green"
+          />
+          <SummaryCard
+            title="Average Expense"
+            value={formatCurrency(summary.average)}
+            icon="📊"
+            color="purple"
+          />
+          <SummaryCard
+            title="Top Category"
+            value={summary.topCategory || 'N/A'}
+            icon="🏆"
+            trend={summary.topCategory ? formatCurrency(summary.byCategory[summary.topCategory]) : ''}
+            color="orange"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Form and Chart */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Add Expense Form */}
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Add New Expense</h2>
+              <ExpenseForm onSubmit={handleAddExpense} />
+            </div>
+
+            {/* Category Chart */}
+            <CategoryChart data={summary.byCategory} total={summary.total} />
+          </div>
+
+          {/* Right Column - Filters and List */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Filters */}
+            <ExpenseFilters filters={filters} onFiltersChange={setFilters} />
+
+            {/* Expense List */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Expenses
+                  {filteredExpenses.length !== expenses.length && (
+                    <span className="text-sm font-normal text-gray-500 ml-2">
+                      ({filteredExpenses.length} of {expenses.length})
+                    </span>
+                  )}
+                </h2>
+              </div>
+              <ExpenseList
+                expenses={filteredExpenses}
+                onEdit={openEditModal}
+                onDelete={handleDeleteExpense}
+              />
+            </div>
+          </div>
         </div>
       </main>
+
+      {/* Edit Modal */}
+      <Modal isOpen={isEditModalOpen} onClose={closeEditModal} title="Edit Expense">
+        {editingExpense && (
+          <ExpenseForm
+            onSubmit={handleEditExpense}
+            initialData={{
+              date: editingExpense.date,
+              amount: editingExpense.amount.toString(),
+              category: editingExpense.category,
+              description: editingExpense.description,
+            }}
+            submitLabel="Update Expense"
+            onCancel={closeEditModal}
+          />
+        )}
+      </Modal>
     </div>
   );
 }
