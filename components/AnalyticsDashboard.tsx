@@ -52,7 +52,7 @@ export function AnalyticsDashboard({ expenses }: AnalyticsDashboardProps) {
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-4">Spending by Category</h3>
         <div className="space-y-3">
-          {analytics.categoryBreakdown.map((cat, index) => (
+          {analytics.categoryBreakdown.map((cat) => (
             <div key={cat.category} className="flex items-center">
               <div className="flex-1">
                 <div className="flex justify-between mb-1">
