@@ -1,6 +1,6 @@
-# Expense Tracker
+# Expense Tracker AI
 
-A modern, professional expense tracking web application built with Next.js 14, TypeScript, and Tailwind CSS. Track your personal finances with an intuitive interface, comprehensive analytics, and powerful filtering capabilities.
+A modern, professional expense tracking web application built with Next.js 16, TypeScript, and Tailwind CSS. Track your personal finances with an intuitive interface, comprehensive analytics, powerful filtering capabilities, and insightful visualizations.
 
 ## Features
 
@@ -14,6 +14,7 @@ A modern, professional expense tracking web application built with Next.js 14, T
 - **Dashboard Overview**: View total spending, monthly totals, average expenses, and top categories at a glance
 - **Category Breakdown**: Visual chart showing spending distribution across all categories
 - **Summary Cards**: Key metrics displayed in beautiful, informative cards
+- **Monthly Insights Page**: Interactive donut chart visualization, top 3 spending categories, and budget streak tracking
 - **Top Categories Page**: Dedicated analytics page with category rankings, time period filtering, and spending insights
 - **Top Vendors Page**: Track spending by vendor/merchant with aggregation, sorting, and detailed statistics
 
@@ -123,6 +124,14 @@ npm run start
 4. Adjust display limits to show top 5, 10, 20, 50, or all vendors
 5. See which categories you spend at each vendor
 
+### Viewing Monthly Insights
+1. Click the "Monthly Insights" button in the header
+2. View your current month's spending in an interactive donut chart
+3. See your top 3 spending categories with amounts
+4. Track your budget streak (consecutive days under daily budget)
+5. Review summary statistics and spending insights
+6. The donut chart visualizes category distribution with custom SVG rendering
+
 ## Project Structure
 
 ```
@@ -130,6 +139,8 @@ expense-tracker-ai/
 ├── app/
 │   ├── layout.tsx               # Root layout with metadata
 │   ├── page.tsx                 # Main application page
+│   ├── monthly-insights/
+│   │   └── page.tsx             # Monthly Insights with donut chart
 │   ├── top-categories/
 │   │   └── page.tsx             # Top Categories analytics page
 │   ├── top-vendors/
@@ -152,16 +163,28 @@ expense-tracker-ai/
 ├── types/
 │   ├── expense.ts               # TypeScript type definitions
 │   └── category-stats.ts        # Category statistics types
+├── __tests__/                   # Test suites (65 tests)
+│   ├── app/monthly-insights/
+│   │   └── page.test.tsx        # MonthlyInsights component tests
+│   └── lib/
+│       ├── utils.test.ts        # Utility function tests
+│       └── monthly-insights.test.ts  # Monthly calculations tests
+├── jest.config.js               # Jest configuration
+├── jest.setup.js                # Test environment setup
+├── CLAUDE.md                    # Development session log
 └── public/                      # Static assets
 ```
 
 ## Technologies Used
 
-- **Next.js 14**: React framework with App Router
-- **TypeScript**: Type-safe code
-- **Tailwind CSS**: Utility-first CSS framework
-- **React Hooks**: State management with useState and useEffect
+- **Next.js 16**: React framework with App Router
+- **React 19**: Latest React with enhanced performance
+- **TypeScript 5**: Type-safe code with modern features
+- **Tailwind CSS 4**: Utility-first CSS framework
+- **React Hooks**: State management with useState, useEffect, and useMemo
 - **localStorage**: Client-side data persistence
+- **Jest 30**: Testing framework with React Testing Library
+- **Custom SVG**: Hand-crafted donut chart visualization
 
 ## Key Features Explained
 
@@ -188,8 +211,10 @@ The application is fully responsive with breakpoints for:
 - Total spending across all filtered expenses
 - Monthly total (current month only)
 - Average expense amount
-- Category-wise breakdown
-- Top spending category
+- Category-wise breakdown with percentages
+- Top spending category identification
+- Budget streak tracking (days under daily budget)
+- Donut chart angle calculations for visual representation
 
 ## Browser Support
 
@@ -204,20 +229,44 @@ Recommended browsers:
 - Safari (latest)
 - Edge (latest)
 
+## Testing
+
+The application includes a comprehensive test suite with 65 tests:
+
+### Running Tests
+```bash
+npm test                # Run all tests
+npm run test:watch      # Run tests in watch mode
+npm run test:coverage   # Run tests with coverage report
+```
+
+### Test Coverage
+- **65 tests** across 3 test suites
+- **97.56%** statement coverage on MonthlyInsights
+- **100%** function coverage
+- Tests for component rendering, calculations, edge cases, and accessibility
+
+### Test Files
+- `__tests__/app/monthly-insights/page.test.tsx`: Component behavior tests
+- `__tests__/lib/utils.test.ts`: Utility function tests
+- `__tests__/lib/monthly-insights.test.ts`: Calculation logic tests
+
 ## Future Enhancements
 
 Potential features for future versions:
+- Budget configuration UI (currently uses localStorage)
 - Multiple currency support
 - Recurring expenses
-- Budget setting and tracking
+- Month-to-month comparison charts
 - Income tracking
-- Advanced charts (line graphs, pie charts)
+- Interactive donut chart with hover tooltips
 - Dark mode
 - Cloud sync
 - Import from CSV
 - Receipt photo upload
 - Tags/labels for expenses
 - Multi-user support
+- Budget alerts and notifications
 
 ## License
 
@@ -233,4 +282,6 @@ If you encounter any issues or have questions:
 
 ---
 
-Built with Next.js 14, TypeScript, and Tailwind CSS
+Built with ❤️ using Next.js 16, React 19, TypeScript 5, and Tailwind CSS 4
+
+For detailed development notes and technical documentation, see [CLAUDE.md](./CLAUDE.md)
