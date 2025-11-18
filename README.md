@@ -14,6 +14,8 @@ A modern, professional expense tracking web application built with Next.js 14, T
 - **Dashboard Overview**: View total spending, monthly totals, average expenses, and top categories at a glance
 - **Category Breakdown**: Visual chart showing spending distribution across all categories
 - **Summary Cards**: Key metrics displayed in beautiful, informative cards
+- **Top Categories Page**: Dedicated analytics page with category rankings, time period filtering, and spending insights
+- **Top Vendors Page**: Track spending by vendor/merchant with aggregation, sorting, and detailed statistics
 
 ### Filtering & Search
 - **Date Range Filter**: View expenses within specific date ranges
@@ -29,8 +31,10 @@ A modern, professional expense tracking web application built with Next.js 14, T
 - Bills
 - Other
 
-### Export
+### Export & Data Management
 - **CSV Export**: Download your filtered expenses as a CSV file for external analysis
+- **Vendor Tracking**: Optional vendor field to track where money is spent
+- **Backward Compatible**: All new features work seamlessly with existing data
 
 ### Design
 - Modern, clean interface with professional styling
@@ -105,28 +109,50 @@ npm run start
 2. Click the "Export CSV" button in the header
 3. A CSV file will download with your filtered expenses
 
+### Viewing Top Categories
+1. Click the "Top Categories" button in the header
+2. View your expenses grouped by category with rankings
+3. Use time period filters (All Time, This Month, This Quarter, This Year)
+4. Adjust display limits to show top 3, 5, or all categories
+5. Review insights about your spending patterns
+
+### Viewing Top Vendors
+1. Click the "Top Vendors" button in the header
+2. View your expenses grouped by vendor/merchant
+3. Sort by total amount, transaction count, or average per transaction
+4. Adjust display limits to show top 5, 10, 20, 50, or all vendors
+5. See which categories you spend at each vendor
+
 ## Project Structure
 
 ```
 expense-tracker-ai/
 ├── app/
-│   ├── layout.tsx          # Root layout with metadata
-│   ├── page.tsx             # Main application page
-│   └── globals.css          # Global styles
+│   ├── layout.tsx               # Root layout with metadata
+│   ├── page.tsx                 # Main application page
+│   ├── top-categories/
+│   │   └── page.tsx             # Top Categories analytics page
+│   ├── top-vendors/
+│   │   └── page.tsx             # Top Vendors analytics page
+│   └── globals.css              # Global styles
 ├── components/
-│   ├── ExpenseForm.tsx      # Form for adding/editing expenses
-│   ├── ExpenseList.tsx      # List container for expenses
-│   ├── ExpenseItem.tsx      # Individual expense display
-│   ├── ExpenseFilters.tsx   # Filter controls
-│   ├── SummaryCard.tsx      # Dashboard summary cards
-│   ├── CategoryChart.tsx    # Category spending visualization
-│   └── Modal.tsx            # Reusable modal component
+│   ├── ExpenseForm.tsx          # Form for adding/editing expenses
+│   ├── ExpenseList.tsx          # List container for expenses
+│   ├── ExpenseItem.tsx          # Individual expense display
+│   ├── ExpenseFilters.tsx       # Filter controls
+│   ├── SummaryCard.tsx          # Dashboard summary cards
+│   ├── CategoryChart.tsx        # Category spending visualization
+│   ├── TopCategoryCard.tsx      # Category statistics card
+│   ├── VendorCard.tsx           # Vendor statistics card
+│   └── Modal.tsx                # Reusable modal component
 ├── lib/
-│   ├── storage.ts           # localStorage utilities
-│   └── utils.ts             # Helper functions and calculations
+│   ├── storage.ts               # localStorage utilities
+│   ├── utils.ts                 # Helper functions and calculations
+│   └── category-utils.ts        # Category aggregation utilities
 ├── types/
-│   └── expense.ts           # TypeScript type definitions
-└── public/                  # Static assets
+│   ├── expense.ts               # TypeScript type definitions
+│   └── category-stats.ts        # Category statistics types
+└── public/                      # Static assets
 ```
 
 ## Technologies Used
