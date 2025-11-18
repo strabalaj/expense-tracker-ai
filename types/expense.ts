@@ -12,6 +12,7 @@ export interface Expense {
   amount: number;
   category: ExpenseCategory;
   description: string;
+  vendor?: string; // Optional vendor/merchant name
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
 }
@@ -21,6 +22,7 @@ export interface ExpenseFormData {
   amount: string;
   category: ExpenseCategory;
   description: string;
+  vendor?: string;
 }
 
 export interface DateRange {
@@ -41,4 +43,13 @@ export interface ExpenseSummary {
   byCategory: Record<ExpenseCategory, number>;
   monthlyTotal: number;
   topCategory: ExpenseCategory | null;
+}
+
+export interface VendorSummary {
+  vendor: string;
+  totalAmount: number;
+  transactionCount: number;
+  averageAmount: number;
+  categories: ExpenseCategory[];
+  lastTransaction: string; // ISO date string
 }

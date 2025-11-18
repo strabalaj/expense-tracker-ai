@@ -1,4 +1,4 @@
-import { Expense, ExpenseCategory, ExpenseSummary, ExpenseFilters } from '@/types/expense';
+import { Expense, ExpenseCategory, ExpenseSummary, ExpenseFilters, VendorSummary } from '@/types/expense';
 
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('en-US', {
@@ -146,4 +146,52 @@ export const categoryIcons: Record<ExpenseCategory, string> = {
   Shopping: '🛍️',
   Bills: '📄',
   Other: '📌',
+};
+
+export const aggregateVendorData = (expenses: Expense[]): VendorSummary[] => {
+  const vendorMap = new Map<string, {
+    totalAmount: number;
+    transactionCount: number;
+    categories: Set<ExpenseCategory>;
+    lastTransaction: string;
+  }>();
+
+  expenses.forEach(expense => {
+    const vendor = expense.vendor || 'Unknown Vendor';
+    const existing = vendorMap.get(vendor);
+
+    if (existing) {
+      existing.totalAmount += expense.amount;
+      existing.transactionCount += 1;
+      existing.categories.add(expense.category);
+      if (expense.date > existing.lastTransaction) {
+        existing.lastTransaction = expense.date;
+      }
+    } else {
+      vendorMap.set(vendor, {
+        totalAmount: expense.amount,
+        transactionCount: 1,
+        categories: new Set([expense.category]),
+        lastTransaction: expense.date,
+      });
+    }
+  });
+
+  const vendorSummaries: VendorSummary[] = Array.from(vendorMap.entries()).map(
+    ([vendor, data]) => ({
+      vendor,
+      totalAmount: data.totalAmount,
+      transactionCount: data.transactionCount,
+      averageAmount: data.totalAmount / data.transactionCount,
+      categories: Array.from(data.categories),
+      lastTransaction: data.lastTransaction,
+    })
+  );
+
+  return vendorSummaries.sort((a, b) => b.totalAmount - a.totalAmount);
+};
+
+export const getTopVendors = (expenses: Expense[], limit: number = 10): VendorSummary[] => {
+  const allVendors = aggregateVendorData(expenses);
+  return allVendors.slice(0, limit);
 };

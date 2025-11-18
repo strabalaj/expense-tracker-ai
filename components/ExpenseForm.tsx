@@ -31,6 +31,7 @@ export default function ExpenseForm({
       amount: '',
       category: 'Food',
       description: '',
+      vendor: '',
     }
   );
 
@@ -68,6 +69,7 @@ export default function ExpenseForm({
           amount: '',
           category: 'Food',
           description: '',
+          vendor: '',
         });
       }
     }
@@ -145,6 +147,21 @@ export default function ExpenseForm({
           }`}
         />
         {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="vendor" className="block text-sm font-medium text-gray-700 mb-1">
+          Vendor/Merchant (Optional)
+        </label>
+        <input
+          type="text"
+          id="vendor"
+          value={formData.vendor || ''}
+          onChange={(e) => setFormData({ ...formData, vendor: e.target.value })}
+          placeholder="e.g., Starbucks, Amazon, Shell"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+        <p className="text-xs text-gray-500 mt-1">Adding vendor info helps track your top spending locations</p>
       </div>
 
       <div className="flex gap-3 pt-2">

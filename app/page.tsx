@@ -17,6 +17,7 @@ import ExpenseFilters from '@/components/ExpenseFilters';
 import SummaryCard from '@/components/SummaryCard';
 import CategoryChart from '@/components/CategoryChart';
 import Modal from '@/components/Modal';
+import Link from 'next/link';
 
 export default function Home() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -43,6 +44,7 @@ export default function Home() {
       amount: parseFloat(formData.amount),
       category: formData.category,
       description: formData.description,
+      vendor: formData.vendor,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -61,6 +63,7 @@ export default function Home() {
       amount: parseFloat(formData.amount),
       category: formData.category,
       description: formData.description,
+      vendor: formData.vendor,
       updatedAt: new Date().toISOString(),
     };
 
@@ -121,16 +124,27 @@ export default function Home() {
               <h1 className="text-3xl font-bold text-gray-900">Expense Tracker</h1>
               <p className="text-gray-600 mt-1">Manage your personal finances with ease</p>
             </div>
-            <button
-              onClick={handleExport}
-              disabled={filteredExpenses.length === 0}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              Export CSV
-            </button>
+            <div className="flex gap-3">
+              <Link
+                href="/top-vendors"
+                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Top Vendors
+              </Link>
+              <button
+                onClick={handleExport}
+                disabled={filteredExpenses.length === 0}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Export CSV
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -216,6 +230,7 @@ export default function Home() {
               amount: editingExpense.amount.toString(),
               category: editingExpense.category,
               description: editingExpense.description,
+              vendor: editingExpense.vendor,
             }}
             submitLabel="Update Expense"
             onCancel={closeEditModal}
