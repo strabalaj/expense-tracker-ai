@@ -1,7 +1,7 @@
 # Integration Summary: Export, Analytics & Vendor Tracking Features
 
-**Latest Integration:** Top Categories & Top Vendors Features
-**Date:** 2025-11-17
+**Latest Integration:** Monthly Insights with Donut Chart & Testing Infrastructure
+**Date:** 2025-11-18
 **Status:** ✅ Successfully Integrated
 
 ## Features Integrated
@@ -218,6 +218,45 @@ git worktree remove ../expense-tracker-analytics
 - Graceful handling of missing vendor data ("Unknown Vendor")
 - Efficient aggregation using Map data structure
 
+### 5. Monthly Insights Dashboard (`main`)
+**Commits:** `a904b36`, `afd560c`, `d3d6133`, `3f19d68`, `871b12d`, `a8354e1`
+**Date:** 2025-11-18
+
+**Files Added:**
+- `app/monthly-insights/page.tsx` - Monthly Insights page with donut chart
+- `jest.config.js` - Jest testing configuration
+- `jest.setup.js` - Test environment setup with mocks
+- `__tests__/app/monthly-insights/page.test.tsx` - Component tests (23 tests)
+- `__tests__/lib/utils.test.ts` - Utility function tests (21 tests)
+- `__tests__/lib/monthly-insights.test.ts` - Calculation logic tests (21 tests)
+- `CLAUDE.md` - Comprehensive development session documentation
+
+**Files Modified:**
+- `app/page.tsx` - Added Monthly Insights navigation button
+- `package.json` - Added test dependencies and scripts
+- `package-lock.json` - Updated dependencies
+- `README.md` - Updated documentation with new features
+
+**Capabilities:**
+- Custom SVG donut chart visualization showing category spending breakdown
+- Top 3 spending categories display with emoji icons and amounts
+- Budget streak tracker (counts days under daily budget)
+- Monthly expense filtering (current month only)
+- Summary statistics (total, transactions, budget remaining)
+- Configurable monthly budget (default: $1000, stored in localStorage)
+- Special handling for 100% single category (renders as solid donut)
+- Responsive design with empty and loading states
+- useMemo optimization for expensive calculations
+
+**Testing Infrastructure:**
+- Jest 30.2.0 with Next.js integration
+- React Testing Library 16.3.0
+- 65 comprehensive tests across 3 test suites
+- 97.56% statement coverage on MonthlyInsights
+- 100% function coverage
+- Test scripts: test, test:watch, test:coverage
+- Component rendering, calculations, edge cases, and accessibility tests
+
 ## Latest Integration Process (November 17, 2025)
 
 ### Worktree Setup
@@ -275,13 +314,15 @@ npx tsc --noEmit
 - ✅ Both pages accessible from main dashboard
 - ✅ Back navigation implemented on both analytics pages
 
-## Updated File Structure
+## Updated File Structure (as of November 18, 2025)
 
 ```
 expense-tracker-ai/
 ├── app/
 │   ├── layout.tsx
 │   ├── page.tsx
+│   ├── monthly-insights/
+│   │   └── page.tsx              ← NEW: Donut chart dashboard
 │   ├── top-categories/
 │   │   └── page.tsx
 │   ├── top-vendors/
@@ -317,9 +358,18 @@ expense-tracker-ai/
 │   ├── category-utils.ts
 │   ├── storage.ts
 │   └── utils.ts
-└── types/
-    ├── category-stats.ts
-    └── expense.ts
+├── types/
+│   ├── category-stats.ts
+│   └── expense.ts
+├── __tests__/                     ← NEW: Test suites
+│   ├── app/monthly-insights/
+│   │   └── page.test.tsx
+│   └── lib/
+│       ├── utils.test.ts
+│       └── monthly-insights.test.ts
+├── jest.config.js                 ← NEW: Jest configuration
+├── jest.setup.js                  ← NEW: Test setup
+└── CLAUDE.md                      ← NEW: Development log
 ```
 
 ## Integration Benefits
@@ -335,20 +385,46 @@ expense-tracker-ai/
 
 ## Feature Compatibility Matrix
 
-| Feature | Export | Analytics | Top Categories | Top Vendors |
-|---------|--------|-----------|----------------|-------------|
-| Export | ✅ | ✅ | ✅ | ✅ |
-| Analytics | ✅ | ✅ | ✅ | ✅ |
-| Top Categories | ✅ | ✅ | ✅ | ✅ |
-| Top Vendors | ✅ | ✅ | ✅ | ✅ |
+| Feature | Export | Analytics | Top Categories | Top Vendors | Monthly Insights | Testing |
+|---------|--------|-----------|----------------|-------------|------------------|---------|
+| Export | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Analytics | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Top Categories | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Top Vendors | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Monthly Insights | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Testing | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 All features are fully compatible and share the same expense data model.
 
 ## Conclusion
 
-The integration of all features (data export, analytics dashboard, top categories, and top vendors) was successful. All features work harmoniously together, sharing data types and providing complementary functionality. The modular architecture ensures that each feature can be maintained and extended independently while working seamlessly as an integrated system.
+The integration of all features (data export, analytics dashboard, top categories, top vendors, and monthly insights) was successful. All features work harmoniously together, sharing data types and providing complementary functionality. The modular architecture ensures that each feature can be maintained and extended independently while working seamlessly as an integrated system.
 
-**Current Status:** ✅ Production-ready with 4 major feature sets integrated
-**Build Status:** ✅ Zero errors, all tests passing
-**Documentation:** ✅ README and integration docs updated
-**Navigation:** ✅ All pages accessible from main dashboard
+**Current Status:** ✅ Production-ready with 5 major feature sets integrated
+**Build Status:** ✅ Zero errors, all 65 tests passing
+**Test Coverage:** ✅ 97.56% statement coverage, 100% function coverage
+**Documentation:** ✅ README, integration docs, and CLAUDE.md updated
+**Navigation:** ✅ All pages accessible from main dashboard with teal Monthly Insights button
+
+## Latest Additions (November 18, 2025)
+
+### Monthly Insights Feature
+- ✅ Custom SVG donut chart (no external libraries)
+- ✅ Top 3 categories visualization
+- ✅ Budget streak tracking
+- ✅ Special handling for single-category spending
+- ✅ Fully responsive and accessible
+
+### Testing Infrastructure
+- ✅ Jest 30.2.0 configured with Next.js
+- ✅ React Testing Library 16.3.0
+- ✅ 65 comprehensive tests
+- ✅ 97.56% code coverage
+- ✅ Test scripts: `npm test`, `npm run test:watch`, `npm run test:coverage`
+
+### Technical Achievements
+- ✅ No external chart dependencies (custom SVG)
+- ✅ No failing tests or build errors
+- ✅ Backward compatible with all existing features
+- ✅ Performance optimized with React.useMemo
+- ✅ Comprehensive documentation in CLAUDE.md
